@@ -1,0 +1,22 @@
+# Maven build output
+target/
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Selenium / test screenshots or reports if generated
+screenshots/
+test-output/
+
+# Environment files
+.env
