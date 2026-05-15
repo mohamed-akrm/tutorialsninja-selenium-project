@@ -16,7 +16,7 @@ import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TutorialNinjaClickByClickTest {
+public class Main {
 
     private static final String BASE_URL = "https://tutorialsninja.com/demo/";
     private static final String PRODUCT_NAME = "iPhone";

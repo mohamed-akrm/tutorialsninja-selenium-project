@@ -1,38 +1,80 @@
-# TutorialNinja Selenium WebDriver Project
+\# TutorialNinja Simple Selenium Project
 
-This Maven project tests a small e-commerce user journey on TutorialNinja / Qafox OpenCart demo.
 
-## Covered requirements
 
-- Register / Sign Up
-- Login Form
-- Search Bar
-- Add to Wishlist
-- Add to Cart
-- Extra coverage: change currency, product comparison, product review
+This is a beginner Selenium WebDriver automation project using Java.
 
-## Tech stack
 
-- Java
-- Selenium WebDriver
-- WebDriverManager
-- JUnit 5
-- Maven
 
-## How to run in IntelliJ
+\## Website
 
-1. Extract the ZIP file.
-2. Open the folder `tutorialsninja-selenium-project` in IntelliJ IDEA.
-3. Wait until Maven finishes downloading dependencies.
-4. Open `src/test/java/org/example/TutorialNinjaClickByClickTest.java`.
-5. Run the test method `fullEcommerceUserJourney()`.
+https://tutorialsninja.com/demo/
 
-## Main test file
 
-`src/test/java/org/example/TutorialNinjaClickByClickTest.java`
 
-## Notes
+\## Covered Scenarios
 
-- The test creates a new unique account every run using a timestamp-based email.
-- The test uses explicit waits (`WebDriverWait`), not fixed `Thread.sleep()` waits.
-- Chrome must be installed on the machine.
+\- Sign Up / Register
+
+\- Login
+
+\- Search
+
+\- Add to Wishlist
+
+\- Add to Cart
+
+\- Change Currency
+
+
+
+\## Tools Used
+
+\- Java
+
+\- Selenium WebDriver
+
+\- ChromeDriver
+
+\- WebDriverManager
+
+\- Maven
+
+
+
+\## Main Selenium Commands Used
+
+\- get()
+
+\- findElement()
+
+\- By.id()
+
+\- By.name()
+
+\- By.cssSelector()
+
+\- By.linkText()
+
+\- By.partialLinkText()
+
+\- sendKeys()
+
+\- click()
+
+\- clear()
+
+\- getPageSource()
+
+\- quit()
+
+
+
+\## How to Run
+
+1\. Open the project in IntelliJ IDEA.
+
+2\. Open `src/main/java/org/example/Main.java`.
+
+3\. Run the `main` method.
+

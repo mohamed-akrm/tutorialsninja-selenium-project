@@ -1,22 +1,142 @@
-# Maven build output
-target/
+package org.example;
 
-# IntelliJ IDEA files
-.idea/
-*.iml
-*.ipr
-*.iws
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 
-# Logs
-*.log
+public class Main {
 
-# OS files
-.DS_Store
-Thumbs.db
+    public static void main(String[] args) throws InterruptedException {
 
-# Selenium / test screenshots or reports if generated
-screenshots/
-test-output/
+        WebDriverManager.chromedriver().setup();
 
-# Environment files
-.env
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        String baseUrl = "https://tutorialsninja.com/demo/";
+        String productUrl = baseUrl + "index.php?route=product/product&product_id=40";
+        String productName = "iPhone";
+
+        String firstName = "Akram";
+        String lastName = "QA";
+        String email = "akram.qa." + System.currentTimeMillis() + "@gmail.com";
+        String telephone = "01000000000";
+        String password = "Akram12345";
+
+        // Sign Up Scenario
+        driver.get(baseUrl + "index.php?route=account/register");
+        Thread.sleep(2000);
+
+        driver.findElement(By.id("input-firstname")).sendKeys(firstName);
+        driver.findElement(By.id("input-lastname")).sendKeys(lastName);
+        driver.findElement(By.id("input-email")).sendKeys(email);
+        driver.findElement(By.id("input-telephone")).sendKeys(telephone);
+        driver.findElement(By.id("input-password")).sendKeys(password);
+        driver.findElement(By.id("input-confirm")).sendKeys(password);
+
+        driver.findElement(By.name("agree")).click();
+        driver.findElement(By.cssSelector("input[value='Continue']")).click();
+        Thread.sleep(3000);
+
+        if (driver.getPageSource().contains("Your Account Has Been Created")) {
+            System.out.println("Register Passed");
+        } else {
+            System.out.println("Register Failed");
+        }
+
+        driver.findElement(By.linkText("Continue")).click();
+        Thread.sleep(2000);
+
+        // Logout before Login
+        driver.findElement(By.linkText("My Account")).click();
+        Thread.sleep(1000);
+        driver.findElement(By.linkText("Logout")).click();
+        Thread.sleep(2000);
+        driver.findElement(By.linkText("Continue")).click();
+        Thread.sleep(2000);
+
+        // Login Scenario
+        driver.get(baseUrl + "index.php?route=account/login");
+        Thread.sleep(2000);
+
+        driver.findElement(By.id("input-email")).sendKeys(email);
+        driver.findElement(By.id("input-password")).sendKeys(password);
+        driver.findElement(By.cssSelector("input[value='Login']")).click();
+        Thread.sleep(3000);
+
+        if (driver.getPageSource().contains("My Account")) {
+            System.out.println("Login Passed");
+        } else {
+            System.out.println("Login Failed");
+        }
+
+        // Search Scenario
+        driver.get(baseUrl);
+        Thread.sleep(2000);
+
+        driver.findElement(By.name("search")).sendKeys(productName);
+        driver.findElement(By.cssSelector("#search button")).click();
+        Thread.sleep(3000);
+
+        if (driver.getPageSource().contains(productName)) {
+            System.out.println("Search Passed");
+        } else {
+            System.out.println("Search Failed");
+        }
+
+        // Add to Wishlist Scenario
+        driver.get(productUrl);
+        Thread.sleep(2000);
+
+        driver.findElement(By.cssSelector("button[onclick*='wishlist.add']")).click();
+        Thread.sleep(3000);
+
+        driver.findElement(By.partialLinkText("Wish List")).click();
+        Thread.sleep(3000);
+
+        if (driver.getPageSource().contains(productName)) {
+            System.out.println("Wishlist Passed");
+        } else {
+            System.out.println("Wishlist Failed");
+        }
+
+        // Add to Cart Scenario
+        driver.get(productUrl);
+        Thread.sleep(2000);
+
+        WebElement quantity = driver.findElement(By.id("input-quantity"));
+        quantity.clear();
+        quantity.sendKeys("1");
+
+        driver.findElement(By.id("button-cart")).click();
+        Thread.sleep(3000);
+
+        driver.findElement(By.partialLinkText("Shopping Cart")).click();
+        Thread.sleep(3000);
+
+        if (driver.getPageSource().contains(productName)) {
+            System.out.println("Cart Passed");
+        } else {
+            System.out.println("Cart Failed");
+        }
+
+        // Extra Scenario: Change Currency
+        driver.get(baseUrl);
+        Thread.sleep(2000);
+
+        driver.findElement(By.cssSelector("button.btn-link.dropdown-toggle")).click();
+        Thread.sleep(1000);
+        driver.findElement(By.name("EUR")).click();
+        Thread.sleep(3000);
+
+        if (driver.getPageSource().contains("€")) {
+            System.out.println("Currency Change Passed");
+        } else {
+            System.out.println("Currency Change Failed");
+        }
+
+        driver.quit();
+    }
+}
