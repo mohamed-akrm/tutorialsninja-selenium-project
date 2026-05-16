@@ -1,4 +1,4 @@
-\# TutorialNinja Simple Selenium Project
+# TutorialNinja Simple Selenium Project
 
 
 
@@ -6,75 +6,75 @@ This is a beginner Selenium WebDriver automation project using Java.
 
 
 
-\## Website
+## Website
 
 https://tutorialsninja.com/demo/
 
 
 
-\## Covered Scenarios
+## Covered Scenarios
 
-\- Sign Up / Register
+- Sign Up / Register
 
-\- Login
+- Login
 
-\- Search
+- Search
 
-\- Add to Wishlist
+- Add to Wishlist
 
-\- Add to Cart
+- Add to Cart
 
-\- Change Currency
-
-
-
-\## Tools Used
-
-\- Java
-
-\- Selenium WebDriver
-
-\- ChromeDriver
-
-\- WebDriverManager
-
-\- Maven
+- Change Currency
 
 
 
-\## Main Selenium Commands Used
+## Tools Used
 
-\- get()
+- Java
 
-\- findElement()
+- Selenium WebDriver
 
-\- By.id()
+- ChromeDriver
 
-\- By.name()
+- WebDriverManager
 
-\- By.cssSelector()
-
-\- By.linkText()
-
-\- By.partialLinkText()
-
-\- sendKeys()
-
-\- click()
-
-\- clear()
-
-\- getPageSource()
-
-\- quit()
+- Maven
 
 
 
-\## How to Run
+## Main Selenium Commands Used
 
-1\. Open the project in IntelliJ IDEA.
+- get()
 
-2\. Open `src/main/java/org/example/Main.java`.
+- findElement()
 
-3\. Run the `main` method.
+- By.id()
+
+- By.name()
+
+- By.cssSelector()
+
+- By.linkText()
+
+- By.partialLinkText()
+
+- sendKeys()
+
+- click()
+
+- clear()
+
+- getPageSource()
+
+- quit()
+
+
+
+## How to Run
+
+1. Open the project in IntelliJ IDEA.
+
+2. Open `src/main/java/org/example/Main.java`.
+
+3. Run the `main` method.
 

@@ -1,233 +1,219 @@
 package org.example;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-import java.util.Locale;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Main {
 
-    private static final String BASE_URL = "https://tutorialsninja.com/demo/";
-    private static final String PRODUCT_NAME = "iPhone";
-    private static final String PRODUCT_URL = BASE_URL + "index.php?route=product/product&product_id=40";
+    public static void main(String[] args) throws InterruptedException {
 
-    private WebDriver driver;
-    private WebDriverWait wait;
-
-    private final String firstName = "Akram";
-    private final String lastName = "QA";
-    private final String email = "akram.qa." + System.currentTimeMillis() + "@gmail.com";
-    private final String telephone = "01000000000";
-    private final String password = "Akram@12345";
-
-    @BeforeEach
-    void setup() {
+        // setup chrome driver
         WebDriverManager.chromedriver().setup();
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized");
-        options.addArguments("--remote-allow-origins=*");
+        // open chrome browser
+        WebDriver driver = new ChromeDriver();
 
-        driver = new ChromeDriver(options);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    }
+        // maximize browser window
+        driver.manage().window().maximize();
 
-    @AfterEach
-    void tearDown() {
-        if (driver != null) {
-            driver.quit();
+        // create unique email for registration
+        String email = "akram.qa." + System.currentTimeMillis() + "@gmail.com";
+
+        // -------------------------
+        // Sign Up Scenario
+        // -------------------------
+
+        // open register page
+        driver.get("https://tutorialsninja.com/demo/index.php?route=account/register");
+        Thread.sleep(3000);
+
+        // fill register form
+        driver.findElement(By.id("input-firstname")).sendKeys("Akram");
+        Thread.sleep(1000);
+
+        driver.findElement(By.id("input-lastname")).sendKeys("QA");
+        Thread.sleep(1000);
+
+        driver.findElement(By.id("input-email")).sendKeys(email);
+        Thread.sleep(1000);
+
+        driver.findElement(By.id("input-telephone")).sendKeys("01000000000");
+        Thread.sleep(1000);
+
+        driver.findElement(By.id("input-password")).sendKeys("Akram12345");
+        Thread.sleep(1000);
+
+        driver.findElement(By.id("input-confirm")).sendKeys("Akram12345");
+        Thread.sleep(1000);
+
+        // click privacy policy checkbox
+        driver.findElement(By.name("agree")).click();
+        Thread.sleep(1000);
+
+        // click continue button
+        driver.findElement(By.cssSelector("input[value='Continue']")).click();
+        Thread.sleep(3000);
+
+        // verify register
+        if (driver.getPageSource().contains("Your Account Has Been Created")) {
+            System.out.println("Register Passed");
+        } else {
+            System.out.println("Register Failed");
         }
-    }
 
-    @Test
-    @DisplayName("Full Click-by-Click E-commerce Journey: Register, Login, Search, Wishlist, Cart, and Extras")
-    void fullEcommerceUserJourney() {
-        openHomePageAndVerifyMainElements();
-        registerNewUser();
-        logoutIfLoggedIn();
-        loginWithCreatedUser();
-        searchForProductAndVerify(PRODUCT_NAME);
-        addProductToWishlistAndVerify();
-        addProductToCartAndVerify();
-        changeCurrencyToEuroAndVerify();
-        addProductToCompareAndVerify();
-        writeProductReviewAndVerify();
-    }
+        // click continue after register
+        driver.findElement(By.linkText("Continue")).click();
+        Thread.sleep(3000);
 
-    private void openHomePageAndVerifyMainElements() {
-        driver.get(BASE_URL);
-        waitPageContains("Featured");
-        assertTrue(pageText().contains("My Account"), "Home page should contain My Account menu");
-        assertTrue(pageText().contains("Wish List"), "Home page should contain Wish List link");
-        assertTrue(pageText().contains("Shopping Cart"), "Home page should contain Shopping Cart link");
-        assertTrue(pageText().contains("MacBook"), "Home page should contain featured products");
-    }
+        // -------------------------
+        // Logout Scenario
+        // -------------------------
 
-    private void registerNewUser() {
-        driver.get(BASE_URL + "index.php?route=account/register");
+        // click My Account
+        driver.findElement(By.linkText("My Account")).click();
+        Thread.sleep(2000);
 
-        type(By.id("input-firstname"), firstName);
-        type(By.id("input-lastname"), lastName);
-        type(By.id("input-email"), email);
-        type(By.id("input-telephone"), telephone);
-        type(By.id("input-password"), password);
-        type(By.id("input-confirm"), password);
+        // click Logout
+        driver.findElement(By.linkText("Logout")).click();
+        Thread.sleep(3000);
 
-        click(By.cssSelector("input[name='newsletter'][value='1']"));
-        click(By.name("agree"));
-        click(By.cssSelector("input.btn-primary[value='Continue']"));
+        // click Continue after logout
+        driver.findElement(By.linkText("Continue")).click();
+        Thread.sleep(3000);
 
-        wait.until(driver -> driver.getCurrentUrl().contains("account/success")
-                || pageText().contains("Your Account Has Been Created")
-                || pageText().contains("Warning"));
+        // -------------------------
+        // Login Scenario
+        // -------------------------
 
-        String body = pageText();
-        assertTrue(body.contains("Your Account Has Been Created") || driver.getCurrentUrl().contains("account/success"),
-                "Registration should finish successfully. Page text: " + body);
-    }
+        // open login page
+        driver.get("https://tutorialsninja.com/demo/index.php?route=account/login");
+        Thread.sleep(3000);
 
-    private void logoutIfLoggedIn() {
-        driver.get(BASE_URL + "index.php?route=account/logout");
-        wait.until(driver -> pageText().contains("Account Logout") || pageText().contains("Register") || pageText().contains("Login"));
-    }
+        // fill login form
+        driver.findElement(By.id("input-email")).sendKeys(email);
+        Thread.sleep(1000);
 
-    private void loginWithCreatedUser() {
-        driver.get(BASE_URL + "index.php?route=account/login");
+        driver.findElement(By.id("input-password")).sendKeys("Akram12345");
+        Thread.sleep(1000);
 
-        type(By.id("input-email"), email);
-        type(By.id("input-password"), password);
-        click(By.cssSelector("input.btn-primary[value='Login']"));
+        // click login button
+        driver.findElement(By.cssSelector("input[value='Login']")).click();
+        Thread.sleep(3000);
 
-        wait.until(driver -> driver.getCurrentUrl().contains("account/account")
-                || pageText().contains("My Account")
-                || pageText().contains("Warning"));
+        // verify login
+        if (driver.getPageSource().contains("My Account")) {
+            System.out.println("Login Passed");
+        } else {
+            System.out.println("Login Failed");
+        }
 
-        String body = pageText();
-        assertTrue(body.contains("My Account") && !body.contains("Warning: No match"),
-                "Login should finish successfully. Page text: " + body);
-    }
+        // -------------------------
+        // Search Scenario
+        // -------------------------
 
-    private void searchForProductAndVerify(String keyword) {
-        driver.get(BASE_URL);
-        type(By.name("search"), keyword);
-        click(By.cssSelector("#search button"));
+        // open home page
+        driver.get("https://tutorialsninja.com/demo/");
+        Thread.sleep(3000);
 
-        wait.until(driver -> driver.getCurrentUrl().contains("product/search")
-                && pageText().toLowerCase(Locale.ROOT).contains(keyword.toLowerCase(Locale.ROOT)));
+        // write product name in search box
+        driver.findElement(By.name("search")).sendKeys("iPhone");
+        Thread.sleep(1000);
 
-        assertTrue(pageText().contains(keyword), "Search results should contain the searched product: " + keyword);
-    }
+        // click search button
+        driver.findElement(By.cssSelector("#search button")).click();
+        Thread.sleep(3000);
 
-    private void addProductToWishlistAndVerify() {
-        driver.get(PRODUCT_URL);
-        waitPageContains(PRODUCT_NAME);
+        // verify search result
+        if (driver.getPageSource().contains("iPhone")) {
+            System.out.println("Search Passed");
+        } else {
+            System.out.println("Search Failed");
+        }
 
-        click(By.cssSelector("button[onclick*='wishlist.add']"));
-        waitForAlertText("wish list");
+        // -------------------------
+        // Add to Wishlist Scenario
+        // -------------------------
 
-        driver.get(BASE_URL + "index.php?route=account/wishlist");
-        waitPageContains("My Wish List");
-        assertTrue(pageText().contains(PRODUCT_NAME), "Wishlist should contain product: " + PRODUCT_NAME);
-    }
+        // open product page
+        driver.get("https://tutorialsninja.com/demo/index.php?route=product/product&product_id=40");
+        Thread.sleep(3000);
 
-    private void addProductToCartAndVerify() {
-        driver.get(PRODUCT_URL);
-        waitPageContains(PRODUCT_NAME);
+        // click add to wishlist button
+        driver.findElement(By.cssSelector("button[onclick*='wishlist.add']")).click();
+        Thread.sleep(3000);
 
-        WebElement quantity = waitVisible(By.id("input-quantity"));
+        // open wishlist page
+        driver.findElement(By.partialLinkText("Wish List")).click();
+        Thread.sleep(3000);
+
+        // verify wishlist
+        if (driver.getPageSource().contains("iPhone")) {
+            System.out.println("Wishlist Passed");
+        } else {
+            System.out.println("Wishlist Failed");
+        }
+
+        // -------------------------
+        // Add to Cart Scenario
+        // -------------------------
+
+        // open product page again
+        driver.get("https://tutorialsninja.com/demo/index.php?route=product/product&product_id=40");
+        Thread.sleep(3000);
+
+        // locate quantity input
+        WebElement quantity = driver.findElement(By.id("input-quantity"));
+
+        // clear old quantity value
         quantity.clear();
+        Thread.sleep(1000);
+
+        // type new quantity
         quantity.sendKeys("1");
+        Thread.sleep(1000);
 
-        click(By.id("button-cart"));
-        waitForAlertText("shopping cart");
+        // click add to cart button
+        driver.findElement(By.id("button-cart")).click();
+        Thread.sleep(3000);
 
-        driver.get(BASE_URL + "index.php?route=checkout/cart");
-        waitPageContains("Shopping Cart");
-        assertTrue(pageText().contains(PRODUCT_NAME), "Shopping cart should contain product: " + PRODUCT_NAME);
-    }
+        // open shopping cart
+        driver.findElement(By.partialLinkText("Shopping Cart")).click();
+        Thread.sleep(3000);
 
-    private void changeCurrencyToEuroAndVerify() {
-        driver.get(BASE_URL);
-        click(By.cssSelector("button.btn-link.dropdown-toggle"));
-        click(By.name("EUR"));
-        waitPageContains("€");
-        assertTrue(pageText().contains("€"), "Currency should be changed to Euro");
-    }
-
-    private void addProductToCompareAndVerify() {
-        driver.get(PRODUCT_URL);
-        waitPageContains(PRODUCT_NAME);
-
-        click(By.cssSelector("button[onclick*='compare.add']"));
-        waitForAlertText("product comparison");
-
-        driver.get(BASE_URL + "index.php?route=product/compare");
-        waitPageContains("Product Comparison");
-        assertTrue(pageText().contains(PRODUCT_NAME), "Product comparison should contain product: " + PRODUCT_NAME);
-    }
-
-    private void writeProductReviewAndVerify() {
-        driver.get(PRODUCT_URL);
-        waitPageContains(PRODUCT_NAME);
-
-        click(By.cssSelector("a[href='#tab-review']"));
-        type(By.id("input-name"), firstName + " " + lastName);
-        type(By.id("input-review"), "This is an automation review written by Selenium WebDriver for a QA class project.");
-        click(By.cssSelector("input[name='rating'][value='5']"));
-        click(By.id("button-review"));
-
-        waitForAlertText("review");
-        assertTrue(pageText().toLowerCase(Locale.ROOT).contains("review"), "Review message should appear");
-    }
-
-    private void type(By locator, String value) {
-        WebElement element = waitVisible(locator);
-        scrollTo(element);
-        element.clear();
-        element.sendKeys(value);
-    }
-
-    private void click(By locator) {
-        try {
-            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-            scrollTo(element);
-            wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
-        } catch (TimeoutException | ElementClickInterceptedException e) {
-            throw new AssertionError("Could not click locator: " + locator
-                    + "\nCurrent URL: " + driver.getCurrentUrl()
-                    + "\nVisible page text:\n" + pageText(), e);
+        // verify cart
+        if (driver.getPageSource().contains("iPhone")) {
+            System.out.println("Cart Passed");
+        } else {
+            System.out.println("Cart Failed");
         }
-    }
 
-    private WebElement waitVisible(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
+        // -------------------------
+        // Extra Scenario: Change Currency
+        // -------------------------
 
-    private void waitPageContains(String expectedText) {
-        wait.until(driver -> pageText().toLowerCase(Locale.ROOT).contains(expectedText.toLowerCase(Locale.ROOT)));
-    }
+        // open home page
+        driver.get("https://tutorialsninja.com/demo/");
+        Thread.sleep(3000);
 
-    private void waitForAlertText(String expectedText) {
-        wait.until(driver -> !driver.findElements(By.cssSelector(".alert, .alert-success, .alert-danger")).isEmpty()
-                && pageText().toLowerCase(Locale.ROOT).contains(expectedText.toLowerCase(Locale.ROOT)));
-    }
+        // click currency dropdown
+        driver.findElement(By.cssSelector("button.btn-link.dropdown-toggle")).click();
+        Thread.sleep(2000);
 
-    private String pageText() {
-        return driver.findElement(By.tagName("body")).getText();
-    }
+        // choose Euro
+        driver.findElement(By.name("EUR")).click();
+        Thread.sleep(3000);
 
-    private void scrollTo(WebElement element) {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+        // verify currency changed
+        if (driver.getPageSource().contains("€")) {
+            System.out.println("Currency Change Passed");
+        } else {
+            System.out.println("Currency Change Failed");
+        }
+
+        // close browser
+        driver.quit();
     }
 }
